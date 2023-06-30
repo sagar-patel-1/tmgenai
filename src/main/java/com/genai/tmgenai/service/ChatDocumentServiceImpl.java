@@ -27,13 +27,13 @@ public class ChatDocumentServiceImpl implements ChatDocumentService{
     }
     @Override
     public FileServiceResponse uploadPolicyDocument(MultipartFile file) throws URISyntaxException, IOException {
-        FileServiceResponse fileServiceResponse = uploadFile(file);
-        String fileId = fileServiceResponse.getFileResponseMeta().getFileId();
-        if(fileId != null){
-            fileEmbeddingService.embedFile(file, fileId);
-            return fileServiceResponse;
-        }
-        return null;
+//        FileServiceResponse fileServiceResponse = uploadFile(file);
+//        String fileId = fileServiceResponse.getFileResponseMeta().getFileId();
+//        if(fileId != null){
+            fileEmbeddingService.embedFile(file, "HDFC_FILE");
+            return null;
+//        }
+//        return null;
     }
 
     private FileServiceResponse uploadFile(MultipartFile file) throws URISyntaxException {
