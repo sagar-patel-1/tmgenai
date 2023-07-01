@@ -12,6 +12,8 @@ import java.net.URI;
 @Service
 public class RestService {
 
+    //insurernotice, brochure
+
     private final RestTemplate restTemplate;
 
     RestService(RestTemplate restTemplate) {
