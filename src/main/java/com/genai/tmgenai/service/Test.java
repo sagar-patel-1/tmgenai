@@ -49,7 +49,7 @@ public class Test {
 
         // Embed segments (convert them into semantic vectors)
         EmbeddingModel embeddingModel = OpenAiEmbeddingModel.builder()
-                .apiKey("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") // https://platform.openai.com/account/api-keys
+                .apiKey("test") // https://platform.openai.com/account/api-keys
                 .modelName(TEXT_EMBEDDING_ADA_002)
                 .timeout(ofSeconds(15))
                 .build();
@@ -65,7 +65,7 @@ public class Test {
 //                .index("documents") // make sure the dimensions of the Pinecone index match the dimensions of the embedding model (1536 for text-embedding-ada-002)
 //                .build();
 //
-        PineconeEmbeddingStoreImpl pincone = new PineconeEmbeddingStoreImpl("1d0899b3-7abf-40be-a267-ac208d572ed3", "asia-southeast1-gcp-free", "bca6a53", "documents", "default");
+        PineconeEmbeddingStoreImpl pincone = new PineconeEmbeddingStoreImpl("test", "asia-southeast1-gcp-free", "bca6a53", "documents", "default");
         pincone.addAll(embeddings, finalSegments);
 
 
