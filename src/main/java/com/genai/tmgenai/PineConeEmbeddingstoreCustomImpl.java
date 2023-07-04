@@ -1,5 +1,7 @@
 package com.genai.tmgenai;
 
+import com.google.protobuf.Struct;
+import com.google.protobuf.StructOrBuilder;
 import com.google.protobuf.Value;
 import dev.langchain4j.data.document.DocumentSegment;
 import dev.langchain4j.data.embedding.Embedding;
@@ -35,6 +37,8 @@ public class PineConeEmbeddingstoreCustomImpl extends PineconeEmbeddingStoreImpl
 
     @Override
     public List<EmbeddingMatch<DocumentSegment>> findRelevant(Embedding referenceEmbedding, int maxResults) {
+//        Struct filter = Struct.newBuilder().putFields("fileId", Value.newBuilder().setStringValue("HDFC_FILE").build()).build();
+//        QueryVector.newBuilder().setFilter(filter).build();
         QueryVector queryVector = QueryVector.newBuilder().addAllValues(referenceEmbedding.vectorAsList()).setTopK(maxResults).setNamespace(this.nameSpace).build();
         QueryRequest queryRequest = QueryRequest.newBuilder().addQueries(queryVector).setTopK(maxResults).build();
         List<String> matchedVectorIds = (List)((SingleQueryResults)this.connection.getBlockingStub().query(queryRequest).getResultsList().get(0)).getMatchesList().stream().map(ScoredVector::getId).collect(Collectors.toList());
