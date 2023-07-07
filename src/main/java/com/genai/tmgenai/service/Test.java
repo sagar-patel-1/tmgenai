@@ -8,9 +8,16 @@ import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
 import dev.langchain4j.store.embedding.PineconeEmbeddingStore;
 import dev.langchain4j.store.embedding.PineconeEmbeddingStoreImpl;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static dev.langchain4j.data.document.DocumentType.PDF;
@@ -21,10 +28,78 @@ import static java.time.Duration.ofSeconds;
 public class Test {
     public static void main(String[] args) {
         try {
-            testMetadata();
+            testDates();
+//            testMetadata();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static void testDates() throws ParseException {
+        Date currentDate = LocalDateTime.now().toDate();
+        Date resultsExpiryDate = getTodayEndDate("");
+        System.out.println(currentDate);
+        System.out.println(resultsExpiryDate);
+        System.out.println(resultsExpiryDate.compareTo(currentDate) < 0);
+        DateFormat df = new SimpleDateFormat("YYYY-MM-DD");
+        Date expi=new SimpleDateFormat("dd/MM/yyyy").parse("04/07/2023");
+        System.out.println(expi);
+        Long days = getDifferenceInDays(currentDate, expi);
+        System.out.println(days);
+        System.out.println(expi.compareTo(currentDate) < 0);
+
+
+    }
+
+    public static Long getDifferenceInDays(Date startDate, Date endDate) {
+        Long diff = null;
+        if (startDate != null && endDate != null) {
+            Calendar startCal = Calendar.getInstance();
+            Calendar endCal = Calendar.getInstance();
+            startCal.setTime(startDate);
+            endCal.setTime(endDate);
+            diff = (endCal.getTimeInMillis() - startCal.getTimeInMillis())/86400000;
+        }
+        return diff;
+    }
+
+
+    private static Date getTodayEndDate(String expectedTime) {
+        Date today = new Date();
+
+        DateFormat formatter = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
+
+        DateTime jodaTime = new DateTime();
+
+        int d = jodaTime.getDayOfMonth();
+        String day = "" + (d);
+        if (d < 10) {
+            day = "0" + (d);
+        }
+
+        int m = jodaTime.getMonthOfYear();
+        String month = "" + m;
+        if (m < 10) {
+            month = "0" + m;
+        }
+
+        int y = jodaTime.getYear();
+        String year = "" + y;
+
+        try {
+            if (expectedTime == null) {
+                today = formatter.parse(month + "/" + day + "/" + year + " 23:59:59");
+            }
+            else {
+                today = formatter.parse(month + "/" + day + "/" + year + " " + expectedTime);
+            }
+
+        }
+        catch (Exception e) {
+
+        }
+
+        return today;
     }
 
     static void testMetadata() {
